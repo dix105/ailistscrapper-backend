@@ -65,7 +65,10 @@ app.post("/addAiDetails", async (req, res) => {
   while (flag == 0) {
     const res = await fetch(
       "https://theresanaiforthat.com/ai/" +
-        data2023[index + 1].title.split(" ").join("-")
+        data2023[index + 1].title
+          .replace(/[^a-zA-Z ]/g, "")
+          .split(" ")
+          .join("-")
     );
     if (res.status == 200) {
       const html = await res.text();
@@ -91,7 +94,11 @@ app.post("/addAiDetails", async (req, res) => {
       }
     }
   }
-  return res.send({ ...data2023[index + 1], index: index + 1 });
+  return res.send({
+    ...data2023[index + 1],
+    title: data2023[index + 1].replace(/[^a-zA-Z ]/g, ""),
+    index: index + 1,
+  });
 });
 
 app.listen(4000, () => {
